@@ -29,7 +29,6 @@ public class User {
     
     private String fullName;
     
-    // @Column(nullable = false)
     @NotEmpty(message = "Não pode ser vazio 1.")
     private String name;
     
