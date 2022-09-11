@@ -1,4 +1,0 @@
-CREATE TABLE heroes (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(128)
-);
