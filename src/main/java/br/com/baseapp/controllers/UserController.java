@@ -2,6 +2,7 @@ package br.com.baseapp.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/api/{id}")
-    public User search(@PathVariable("id") Long id) {
+    public User search(@PathVariable("id") UUID id) {
         Optional<User> u = userRepository.findById(id);
 
         if (u.isPresent())
@@ -44,13 +45,13 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/api/findAllMoreThan/{id}")
-    public List<User> findMoreThan(@PathVariable("id") Long id) {
-        return userRepository.findByIdGreaterThan(id);
-    }
+    // @GetMapping("/api/findAllMoreThan/{id}")
+    // public List<User> findMoreThan(@PathVariable("id") UUID id) {
+    //     return userRepository.findByIdGreaterThan(id);
+    // }
 
     @PutMapping("/api/{id}")
-    public User edit(@RequestBody User u, @PathVariable("id") Long id) {
+    public User edit(@RequestBody User u, @PathVariable("id") UUID id) {
         return userRepository.save(u);
     }
 

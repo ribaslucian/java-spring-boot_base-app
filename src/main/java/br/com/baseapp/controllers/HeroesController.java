@@ -2,6 +2,7 @@ package br.com.baseapp.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,12 +31,12 @@ public class HeroesController {
     }
 
     @PostMapping("/api")
-    public Hero create(@RequestBody Hero H) {
-        return heroesRepository.save(H);
+    public Hero create(@RequestBody Hero h) {
+        return heroesRepository.save(h);
     }
 
     @GetMapping("/api/{id}")
-    public Hero search(@PathVariable("id") Long id) {
+    public Hero search(@PathVariable("id") UUID id) {
         Optional<Hero> u = heroesRepository.findById(id);
 
         if (u.isPresent())
@@ -45,7 +46,7 @@ public class HeroesController {
     }
 
     @PutMapping("/api/{id}")
-    public Hero edit(@RequestBody Hero u, @PathVariable("id") Long id) {
+    public Hero edit(@RequestBody Hero u, @PathVariable("id") UUID id) {
         return heroesRepository.save(u);
     }
 
