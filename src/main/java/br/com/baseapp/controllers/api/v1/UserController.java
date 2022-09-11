@@ -1,11 +1,13 @@
-package br.com.baseapp.controllers;
+package br.com.baseapp.controllers.api.v1;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,24 +20,28 @@ import br.com.baseapp.models.User;
 import br.com.baseapp.repositories.UsersRepository;
 
 @RestController
-@Controller
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
     
     @Autowired
     private UsersRepository userRepository;
 
-    @GetMapping("/api")
+    @GetMapping("/")
     public List<User> list() {
         return userRepository.findAll();
     }
 
-    @PostMapping("/api")
-    public User create(@RequestBody User u) {
+    @PostMapping("/")
+    public User create(@RequestBody @Valid User u) {
+        
+        u.setPassword(
+            (new BCryptPasswordEncoder()).encode(u.getPassword())
+        );
+
         return userRepository.save(u);
     }
 
-    @GetMapping("/api/{id}")
+    @GetMapping("/{id}")
     public User search(@PathVariable("id") UUID id) {
         Optional<User> u = userRepository.findById(id);
 
@@ -50,7 +56,7 @@ public class UserController {
     //     return userRepository.findByIdGreaterThan(id);
     // }
 
-    @PutMapping("/api/{id}")
+    @PutMapping("/{id}")
     public User edit(@RequestBody User u, @PathVariable("id") UUID id) {
         return userRepository.save(u);
     }

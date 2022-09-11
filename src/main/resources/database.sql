@@ -7,21 +7,21 @@ DROP TABLE IF exists users;
 
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(128),
-    username VARCHAR(64),
+    full_name VARCHAR(128),
+    name VARCHAR(64) UNIQUE,
+    password VARCHAR(64),
     hierarchy VARCHAR(32)
 );
 
 CREATE TABLE heroes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(128) NOT NULL
+    name VARCHAR(128) NOT NULL UNIQUE
 );
 
 CREATE TABLE favorite_heroes_users (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    -- id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
     hero_id UUID NOT NULL,
-    
-    CONSTRAINT fk_favorite_heroes_users_user FOREIGN KEY(user_id) REFERENCES users(id),
-    CONSTRAINT fk_favorite_heroes_users_hero FOREIGN KEY(hero_id) REFERENCES heroes(id)
+    PRIMARY KEY (user_id, hero_id)
 );
+-- CREATE UNIQUE INDEX "rule_unique:favorite_heroes_users.user_hero" ON favorite_heroes_users(user_id, hero_id);
