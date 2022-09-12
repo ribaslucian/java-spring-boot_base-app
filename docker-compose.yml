@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  database_pg:
+    image: postgres
+    container_name: database_pg
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: spring_base_app
+    ports:
+    - 5432:5432
+    volumes:
+    - ./pg-data:/var/lib/postgresql/
+
+  server_maven:
+    image: maven
+    container_name: server_maven
+    ports:
+    - 80:80
+    volumes:
+    - ./:/usr/src/
+    working_dir: /usr/src/
+    command: bash -c "mvn clean install spring-boot:run"

@@ -1,5 +1,6 @@
 package br.com.baseapp.controllers.api.v1;
 
+import br.com.baseapp.dtos.users.UserCreateDto;
 import br.com.baseapp.models.User;
 import br.com.baseapp.repositories.UsersRepository;
 import br.com.baseapp.services.UsersService;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +32,7 @@ public class UserController {
 
   private UsersRepository userRepository;
   private UsersService userService;
+  private ModelMapper modelMapper;
 
   // @GetMapping("/")
   // public List<User> list() {
@@ -43,15 +47,35 @@ public class UserController {
     return ResponseEntity.ok(userService.listAll());
   }
 
+
+
+
   @PostMapping("/")
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
-  public User create(@RequestBody @Valid User u) {
-    u.setPassword((new BCryptPasswordEncoder()).encode(u.getPassword()));
+  public User create(@RequestBody @Valid UserCreateDto userDto) {
+    // convert DTO to entity
+		User user = modelMapper.map(userDto, User.class);
 
+    user.setPassword((new BCryptPasswordEncoder()).encode(user.getPassword()));
+
+    return userRepository.save(user);
+    
     // return new ResponseEntity<>(userRepository.save(u), HttpStatus.CREATED);
-    return userRepository.save(u);
   }
+
+
+
+
+  // @PostMapping("/")
+  // @ResponseStatus(HttpStatus.CREATED)
+  // @ResponseBody
+  // public User create(@RequestBody @Valid User u) {
+  //   u.setPassword((new BCryptPasswordEncoder()).encode(u.getPassword()));
+
+  //   // return new ResponseEntity<>(userRepository.save(u), HttpStatus.CREATED);
+  //   return userRepository.save(u);
+  // }
 
   @GetMapping("/{id}")
   public User findById(@PathVariable("id") UUID id) {
@@ -79,10 +103,11 @@ public class UserController {
   // }
 
   @PutMapping("/{id}")
+  @ResponseStatus(HttpStatus.ACCEPTED)
+  @ResponseBody
   public User edit(@RequestBody User u, @PathVariable("id") UUID id) {
     return userRepository.save(u);
   }
-
 
   @DeleteMapping("/{id}")
   public ResponseEntity<HttpStatus> deleteById(@PathVariable("id") UUID id) {

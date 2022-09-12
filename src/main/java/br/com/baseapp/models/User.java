@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
@@ -31,17 +30,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     
-    @NotEmpty(message = "É obrigatório informar um nome completo.")
     private String fullName;
     
-    @NotEmpty(message = "É obrigatório informar um nome de usuário.")
-    // @Column(unique = true)
+    @Column(unique = true)
     private String name;
-    
-    @NotEmpty(message = "É obrigatório informar um nome.")
+
     private String password;
     
-    @NotEmpty(message = "É obrigatório informar uma hierarquia.")
     private String hierarchy;
     
 }
