@@ -20,4 +20,8 @@ public class UsersService {
   public void deleteById(UUID id) {
     userRepository.deleteById(id);
   }
+
+  public void updateById(UUID id) {
+    userRepository.deleteById(id);
+  }
 }

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,25 +46,18 @@ public class UserController {
     return ResponseEntity.ok(userService.listAll());
   }
 
-
-
-
   @PostMapping("/")
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
   public User create(@RequestBody @Valid UserCreateDto userDto) {
     // convert DTO to entity
-		User user = modelMapper.map(userDto, User.class);
+    User user = modelMapper.map(userDto, User.class);
 
     user.setPassword((new BCryptPasswordEncoder()).encode(user.getPassword()));
 
     return userRepository.save(user);
-    
     // return new ResponseEntity<>(userRepository.save(u), HttpStatus.CREATED);
   }
-
-
-
 
   // @PostMapping("/")
   // @ResponseStatus(HttpStatus.CREATED)
@@ -106,6 +98,16 @@ public class UserController {
   @ResponseStatus(HttpStatus.ACCEPTED)
   @ResponseBody
   public User edit(@RequestBody User u, @PathVariable("id") UUID id) {
+    userRepository
+      .findById(id)
+      .orElseThrow(
+        () ->
+          new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Entity ID not fount."
+          )
+      );
+
     return userRepository.save(u);
   }
 
