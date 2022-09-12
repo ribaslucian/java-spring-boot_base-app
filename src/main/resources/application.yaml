@@ -20,4 +20,4 @@ spring:
   datasource:
     username: postgres
     password: postgres
-    url: jdbc:postgresql://host.docker.internal:5432/spring_base_app
+    url: ${DB_URL}

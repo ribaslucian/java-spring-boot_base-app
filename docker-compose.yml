@@ -15,9 +15,12 @@ services:
   server_maven:
     image: maven
     container_name: server_maven
+    environment:
+      DB_URL: jdbc:postgresql://host.docker.internal:5432/spring_base_app
     ports:
     - 80:80
     volumes:
     - ./:/usr/src/
     working_dir: /usr/src/
-    command: bash -c "mvn clean install spring-boot:run"
+    command: bash -c "mvn spring-boot:run"
+    # command: bash -c "mvn clean install spring-boot:run"
