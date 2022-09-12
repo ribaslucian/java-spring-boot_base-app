@@ -2,6 +2,8 @@ package br.com.baseapp.repositories;
 
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.baseapp.models.User;
@@ -12,5 +14,8 @@ public interface UsersRepository extends JpaRepository<User, UUID> {
     // public List<User> findAllMoreThan(@Param("id") Long id);
 
     // public List<User> findByIdGreaterThan(UUID id);
+
+    @Transactional
+    void deleteById(UUID id);
     
 }

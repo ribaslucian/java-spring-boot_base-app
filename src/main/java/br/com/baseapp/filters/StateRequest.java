@@ -1,6 +1,7 @@
 package br.com.baseapp.filters;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -12,8 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 
+import br.com.baseapp.components.DateUtil;
+import lombok.extern.log4j.Log4j2;
+
 @Component
-public class MyFilter implements Filter{
+@Log4j2
+// @AllArgsConstructor
+public class StateRequest implements Filter{
 
     @Override
     public void doFilter(ServletRequest request,
@@ -24,6 +30,7 @@ public class MyFilter implements Filter{
         HttpServletResponse res = (HttpServletResponse) response;
  
         System.out.println("\n\n-----------------------\n\n");
+        log.info(DateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
         System.out.println("Request URI is: " + req.getRequestURI());
         chain.doFilter(request, response);
         System.out.println("Response Status Code is: " + res.getStatus());
