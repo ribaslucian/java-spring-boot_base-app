@@ -7,7 +7,7 @@ git add .
 git add -A
 
 IF "%~1"=="" (
-    git commit -m "Auto up by Lucian's script"
+    git commit -m "[only refacting] Auto up by Lucian's script."
 ) ELSE (
     git commit -m %1
 )

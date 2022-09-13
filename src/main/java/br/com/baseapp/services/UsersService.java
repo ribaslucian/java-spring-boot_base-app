@@ -1,6 +1,5 @@
 package br.com.baseapp.services;
 
-import br.com.baseapp.dtos.users.UserCreateDto;
 import br.com.baseapp.models.User;
 import br.com.baseapp.repositories.UsersRepository;
 import java.util.List;
