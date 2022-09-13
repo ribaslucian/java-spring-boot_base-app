@@ -3,6 +3,7 @@ package br.com.baseapp.controllers.api.v1;
 import br.com.baseapp.components.Utils;
 import br.com.baseapp.dtos.users.UserCreateDto;
 import br.com.baseapp.dtos.users.UserUpdateDto;
+import br.com.baseapp.exceptions.BadRequestException;
 import br.com.baseapp.models.User;
 import br.com.baseapp.repositories.UsersRepository;
 import br.com.baseapp.services.UsersService;
@@ -10,10 +11,8 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,13 +54,8 @@ public class UserController {
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
   public User create(@RequestBody @Valid UserCreateDto userDto) {
-    // convert DTO to entity
     User user = modelMapper.map(userDto, User.class);
-
-    user.setPassword((new BCryptPasswordEncoder()).encode(user.getPassword()));
-
-    return userRepository.save(user);
-    // return new ResponseEntity<>(userRepository.save(u), HttpStatus.CREATED);
+    return userService.create(user);
   }
 
   // @PostMapping("/")
@@ -79,13 +72,16 @@ public class UserController {
   public User findById(@PathVariable("id") UUID id) {
     return userRepository
       .findById(id)
-      .orElseThrow(
-        () ->
-          new ResponseStatusException(
-            HttpStatus.BAD_REQUEST,
-            "Entity not fount."
-          )
-      );
+      .orElseThrow(() -> new BadRequestException("Entity not fount."));
+
+      // .orElseThrow(
+      //   () ->
+      //     new ResponseStatusException(
+      //       HttpStatus.BAD_REQUEST,
+      //       "Entity not fount."
+      //     )
+      // );
+      
     // Optional<User> u = userRepository.findById(id);
 
     // if (u.isPresent())
@@ -95,10 +91,10 @@ public class UserController {
     // return null;
   }
 
-  // @GetMapping("/api/findAllMoreThan/{id}")
-  // public List<User> findMoreThan(@PathVariable("id") UUID id) {
-  //     return userRepository.findByIdGreaterThan(id);
-  // }
+  @GetMapping("/findByName/{name}")
+  public List<User> findByName(@PathVariable("name") String name) {
+    return userRepository.findBySimilarityName(name);
+  }
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.ACCEPTED)

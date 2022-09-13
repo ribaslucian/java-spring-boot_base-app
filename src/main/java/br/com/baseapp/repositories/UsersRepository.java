@@ -1,10 +1,13 @@
 package br.com.baseapp.repositories;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import br.com.baseapp.models.User;
@@ -19,5 +22,7 @@ public interface UsersRepository extends JpaRepository<User, UUID> {
 
     @Transactional
     void deleteById(UUID id);
-    
+
+    @Query(value = "SELECT * FROM Users u WHERE u.name ~* :name", nativeQuery = true)
+    public List<User> findBySimilarityName(@Param("name") String name);
 }
