@@ -6,7 +6,7 @@ services:
     # container_name: database_pg
     environment:
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: spring_base_app
+      POSTGRES_DB: spring-boot_base-app
     ports:
     - 5432:5432
     volumes:
@@ -16,8 +16,8 @@ services:
     image: maven
     # container_name: server_maven
     environment:
-      DB_URL: jdbc:postgresql://database_pg:5432/spring_base_app
-      # DB_URL: jdbc:postgresql://host.docker.internal:5432/spring_base_app
+      DB_URL: jdbc:postgresql://database_pg:5432/spring-boot_base-app
+      # DB_URL: jdbc:postgresql://host.docker.internal:5432/spring-boot_base-app
     ports:
     - 80:80
     links:
