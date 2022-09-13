@@ -13,7 +13,7 @@ IF "%~1"=="" (
 )
 
 IF "%~2"=="" (
-    git push origin %1
+    git push origin %2
 ) ELSE (
     git push origin main
 )
