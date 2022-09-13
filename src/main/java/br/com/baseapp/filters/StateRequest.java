@@ -29,12 +29,12 @@ public class StateRequest implements Filter{
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
  
-        System.out.println("\n\n-----------------------\n\n");
+        System.out.println("\n\n-FILTER----------------------\n\n");
         log.info(DateUtil.formatLocalDateTimeToDatabaseStyle(LocalDateTime.now()));
         System.out.println("Request URI is: " + req.getRequestURI());
         chain.doFilter(request, response);
         System.out.println("Response Status Code is: " + res.getStatus());
-        System.out.println("\n\n-----------------------\n\n");
+        System.out.println("\n\n-FILTER----------------------\n\n");
     }
     
 }

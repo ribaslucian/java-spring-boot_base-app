@@ -7,6 +7,9 @@ import lombok.Data;
 @Data
 public class UserCreateDto {
     
+    // @NotEmpty(message = "É obrigatório informar um ID.")
+    // private UUID id;
+    
     @NotEmpty(message = "É obrigatório informar um nome completo.")
     private String fullName;
     

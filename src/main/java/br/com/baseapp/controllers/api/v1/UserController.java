@@ -1,6 +1,8 @@
 package br.com.baseapp.controllers.api.v1;
 
+import br.com.baseapp.components.Utils;
 import br.com.baseapp.dtos.users.UserCreateDto;
+import br.com.baseapp.dtos.users.UserUpdateDto;
 import br.com.baseapp.models.User;
 import br.com.baseapp.repositories.UsersRepository;
 import br.com.baseapp.services.UsersService;
@@ -8,7 +10,10 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -97,8 +103,8 @@ public class UserController {
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.ACCEPTED)
   @ResponseBody
-  public User edit(@RequestBody User u, @PathVariable("id") UUID id) {
-    userRepository
+  public User update(@RequestBody @Valid UserUpdateDto userUpdateDto, @PathVariable("id") UUID id) {
+    User localUser = userRepository
       .findById(id)
       .orElseThrow(
         () ->
@@ -108,7 +114,13 @@ public class UserController {
           )
       );
 
-    return userRepository.save(u);
+    User updatedUser = modelMapper.map(userUpdateDto, User.class);
+    if (updatedUser.getPassword() != null) {
+      updatedUser.setPassword((new BCryptPasswordEncoder()).encode(updatedUser.getPassword()));
+    }
+
+    Utils.copyNonNullProperties(updatedUser, localUser);
+    return userRepository.save(localUser);
   }
 
   @DeleteMapping("/{id}")
