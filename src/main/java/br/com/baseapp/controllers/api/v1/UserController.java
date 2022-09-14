@@ -1,10 +1,10 @@
 package br.com.baseapp.controllers.api.v1;
 
 import br.com.baseapp.components.Utils;
+import br.com.baseapp.domains.User;
 import br.com.baseapp.dtos.users.UserCreateDto;
 import br.com.baseapp.dtos.users.UserUpdateDto;
 import br.com.baseapp.exceptions.BadRequestException;
-import br.com.baseapp.models.User;
 import br.com.baseapp.repositories.UsersRepository;
 import br.com.baseapp.services.UsersService;
 import java.util.List;
@@ -13,6 +13,8 @@ import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,6 +51,13 @@ public class UserController {
     //
     return ResponseEntity.ok(userService.listAll());
   }
+
+
+  @GetMapping("/paginate")
+  public ResponseEntity<Page<User>> paginate(Pageable pageable) {
+    return ResponseEntity.ok(userService.paginate(pageable));
+  }
+
 
   @PostMapping("/")
   @ResponseStatus(HttpStatus.CREATED)

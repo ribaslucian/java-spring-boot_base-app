@@ -1,13 +1,16 @@
 package br.com.baseapp.services;
 
-import br.com.baseapp.models.User;
+import br.com.baseapp.domains.User;
 import br.com.baseapp.repositories.UsersRepository;
+
 import java.util.List;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,10 @@ public class UsersService {
 
   public List<User> listAll() {
     return userRepository.findAll();
+  }
+
+  public Page<User> paginate(Pageable pageable) {
+    return userRepository.findAll(pageable);
   }
 
   @Transactional

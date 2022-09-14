@@ -3,7 +3,7 @@ version: '3.1'
 services:
   database_pg:
     image: postgres
-    # container_name: database_pg
+    container_name: database_pg
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: spring-boot_base-app
@@ -12,12 +12,24 @@ services:
     volumes:
     - ./pg-data:/var/lib/postgresql/
 
+  database_redis:
+    image: redis
+    container_name: database_redis
+    ports:
+      - 6379:6379
+    volumes:
+      - ./.myredis/conf:/usr/local/etc/redis
+    command: bash -c "redis-server"
+      # - --requirepass ${redis}
+    
+
   server_maven:
     image: maven
-    # container_name: server_maven
+    container_name: server_maven
     environment:
       DB_URL: jdbc:postgresql://database_pg:5432/spring-boot_base-app
       # DB_URL: jdbc:postgresql://host.docker.internal:5432/spring-boot_base-app
+      # REDIS_HOST: host.docker.internal
     ports:
     - 80:80
     links:

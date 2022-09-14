@@ -20,4 +20,15 @@ spring:
   datasource:
     username: postgres
     password: postgres
-    url: ${DB_URL}
+    # url: ${DB_URL}
+    url: jdbc:postgresql://host.docker.internal:5432/spring-boot_base-app
+
+  # redis:
+  #   host: localhost
+  #   port: 6379
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
