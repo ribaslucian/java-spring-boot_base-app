@@ -32,7 +32,8 @@ import lombok.Setter;
     name = "users"
     // uniqueConstraints = @UniqueConstraint(columnNames={"id", "name"})
 )
-public class User implements UserDetails {
+// public class User implements UserDetails {
+public class User  {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,37 +50,37 @@ public class User implements UserDetails {
 
     private String authorities;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(authorities.split(","))
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
-    }
+    // @Override
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
+    //     return Arrays.stream(authorities.split(","))
+    //         .map(SimpleGrantedAuthority::new)
+    //         .collect(Collectors.toList());
+    // }
 
-    @Override
-    public String getUsername() {
-        // TODO Auto-generated method stub
-        return this.getName();
-    }
+    // @Override
+    // public String getUsername() {
+    //     // TODO Auto-generated method stub
+    //     return this.getName();
+    // }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    // @Override
+    // public boolean isAccountNonExpired() {
+    //     return true;
+    // }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+    // @Override
+    // public boolean isAccountNonLocked() {
+    //     return true;
+    // }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+    // @Override
+    // public boolean isCredentialsNonExpired() {
+    //     return true;
+    // }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    // @Override
+    // public boolean isEnabled() {
+    //     return true;
+    // }
     
 }

@@ -5,6 +5,8 @@ server:
     include-stacktrace: on-param
 
 spring:
+  application:
+    name: Spring Boot Base Application
   thymeleaf:
     mode: HTML
     cache: FALSE
@@ -32,3 +34,24 @@ logging:
     org:
       hibernate:
         SQL: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, prometheus
+        # include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    metrics:
+      enabled: false
+    prometheus:
+      enabled: true
+
+info:
+  app: Spring Boot 2 Assentials By Lucian
+  website: https://www.linkedin.com/in/ribaslucian/
+  github: https://github.com/ribaslucian

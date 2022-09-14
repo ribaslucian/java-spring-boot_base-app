@@ -7,6 +7,10 @@ import br.com.baseapp.dtos.users.UserUpdateDto;
 import br.com.baseapp.exceptions.BadRequestException;
 import br.com.baseapp.repositories.UsersRepository;
 import br.com.baseapp.services.UsersService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
@@ -29,12 +33,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/users")
 @AllArgsConstructor
-public class UserController {
+public class UsersController {
 
   private UsersRepository userRepository;
   private UsersService userService;
@@ -55,7 +62,9 @@ public class UserController {
 
 
   @GetMapping("/paginate")
-  public ResponseEntity<Page<User>> paginate(Pageable pageable) {
+  @Operation(summary = "List all users paginated", description = "The default size is 5, use the parameter size to change the default value", tags = {"users"})
+  // public ResponseEntity<Page<User>> paginate(@Parameter(required = false) Pageable pageable) {
+  public ResponseEntity<Page<User>> paginate(@Parameter(hidden = true) Pageable pageable) {
     return ResponseEntity.ok(userService.paginate(pageable));
   }
 
@@ -64,6 +73,10 @@ public class UserController {
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
   @PreAuthorize("hasRole('ADMIN')")
+  @ApiResponses(value = {
+    @ApiResponse(responseCode = "204", description = "Successful Operation"),
+    @ApiResponse(responseCode = "400", description = "When Anime Does Not Exist in The Database")
+})
   public User create(@RequestBody @Valid UserCreateDto userDto) {
     User user = modelMapper.map(userDto, User.class);
     return userService.create(user);

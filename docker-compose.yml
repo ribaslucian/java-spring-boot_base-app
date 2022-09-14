@@ -11,6 +11,7 @@ services:
     - 5432:5432
     volumes:
     - ./pg-data:/var/lib/postgresql/
+    mem_limit: 512m 
 
   database_redis:
     image: redis
@@ -21,7 +22,7 @@ services:
       - ./.myredis/conf:/usr/local/etc/redis
     command: bash -c "redis-server"
       # - --requirepass ${redis}
-    
+    mem_limit: 256m 
 
   server_maven:
     image: maven
@@ -39,3 +40,22 @@ services:
     working_dir: /usr/src/
     command: bash -c "mvn spring-boot:run"
     # command: bash -c "mvn clean install spring-boot:run"
+    mem_limit: 512m
+
+  metrics_prometeus:
+    image: prom/prometheus:latest
+    container_name: metrics_prometeus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    mem_limit: 128m
+  
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - 3000:3000
+    mem_limit: 128m
